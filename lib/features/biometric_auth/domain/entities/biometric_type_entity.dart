@@ -1,15 +1,6 @@
-import 'package:equatable/equatable.dart';
+import 'package:biometric_authenticator/core/enums/biometric_category.dart';
 
-enum BiometricCategory {
-  fingerprint,
-  face,
-  iris,
-  weak,
-  strong,
-  unknown,
-}
-
-class BiometricTypeEntity extends Equatable {
+class BiometricTypeEntity {
   final BiometricCategory category;
   final String displayName;
 
@@ -18,6 +9,4 @@ class BiometricTypeEntity extends Equatable {
     required this.displayName,
   });
 
-  @override
-  List<Object?> get props => [category, displayName];
 }

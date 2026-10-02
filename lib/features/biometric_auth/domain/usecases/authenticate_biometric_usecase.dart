@@ -1,4 +1,4 @@
-import '../repositories/biometric_repository.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/repositories/biometric_repository.dart';
 
 class AuthenticateBiometricUseCase {
   final BiometricRepository repository;

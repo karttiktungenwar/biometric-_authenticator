@@ -1,5 +1,5 @@
-import '../entities/biometric_info_entity.dart';
-import '../repositories/biometric_repository.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/entities/biometric_info_entity.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/repositories/biometric_repository.dart';
 
 class CheckBiometricSupportUseCase {
   final BiometricRepository repository;

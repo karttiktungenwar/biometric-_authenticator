@@ -1,10 +1,12 @@
+import 'package:biometric_authenticator/core/enums/biometric_category.dart';
+import 'package:biometric_authenticator/features/biometric_auth/data/data_sources/biometric_local_datasource.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import '../../../../core/errors/failures.dart';
-import '../../domain/entities/biometric_info_entity.dart';
-import '../../domain/entities/biometric_type_entity.dart';
-import '../../domain/repositories/biometric_repository.dart';
-import '../datasources/biometric_local_datasource.dart';
+import 'package:biometric_authenticator/core/errors/failures.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/entities/biometric_info_entity.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/entities/biometric_type_entity.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/repositories/biometric_repository.dart';
+
 
 class BiometricRepositoryImpl implements BiometricRepository {
   final BiometricLocalDataSource localDataSource;

@@ -1,46 +1,30 @@
-import 'package:equatable/equatable.dart';
-import '../../domain/entities/biometric_info_entity.dart';
+part of 'biometric_bloc.dart';
 
-enum AuthStatus {
-  initial,
-  authenticating,
-  authenticated,
-  failed,
-  error,
-}
-
-abstract class BiometricState extends Equatable {
-  const BiometricState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class BiometricInitialState extends BiometricState {
-  const BiometricInitialState();
-}
-
-class BiometricLoadingState extends BiometricState {
-  const BiometricLoadingState();
-}
-
-class BiometricStatusState extends BiometricState {
+class BiometricState extends Equatable {
+  final bool isLoading;
   final BiometricInfoEntity biometricInfo;
   final AuthStatus authStatus;
   final String? errorMessage;
 
-  const BiometricStatusState({
-    required this.biometricInfo,
+  const BiometricState({
+    this.isLoading = false,
+    this.biometricInfo = const BiometricInfoEntity(
+      isSupported: false,
+      canCheckBiometrics: false,
+      availableBiometrics: [],
+    ),
     this.authStatus = AuthStatus.initial,
     this.errorMessage,
   });
 
-  BiometricStatusState copyWith({
+  BiometricState copyWith({
+    bool? isLoading,
     BiometricInfoEntity? biometricInfo,
     AuthStatus? authStatus,
     String? errorMessage,
   }) {
-    return BiometricStatusState(
+    return BiometricState(
+      isLoading: isLoading ?? this.isLoading,
       biometricInfo: biometricInfo ?? this.biometricInfo,
       authStatus: authStatus ?? this.authStatus,
       errorMessage: errorMessage,
@@ -48,5 +32,5 @@ class BiometricStatusState extends BiometricState {
   }
 
   @override
-  List<Object?> get props => [biometricInfo, authStatus, errorMessage];
+  List<Object?> get props => [isLoading, biometricInfo, authStatus, errorMessage];
 }

@@ -1,11 +1,15 @@
+import 'package:biometric_authenticator/core/enums/auth_status.dart';
+import 'package:biometric_authenticator/core/errors/failures.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/entities/biometric_info_entity.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/usecases/authenticate_biometric_usecase.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/usecases/check_biometric_support_usecase.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/usecases/get_available_biometrics_usecase.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/errors/failures.dart';
-import '../../domain/entities/biometric_info_entity.dart';
-import '../../domain/usecases/authenticate_biometric_usecase.dart';
-import '../../domain/usecases/check_biometric_support_usecase.dart';
-import '../../domain/usecases/get_available_biometrics_usecase.dart';
-import 'biometric_event.dart';
-import 'biometric_state.dart';
+
+
+part 'biometric_event.dart';
+part 'biometric_state.dart';
 
 class BiometricBloc extends Bloc<BiometricEvent, BiometricState> {
   final CheckBiometricSupportUseCase checkBiometricSupportUseCase;
@@ -16,7 +20,7 @@ class BiometricBloc extends Bloc<BiometricEvent, BiometricState> {
     required this.checkBiometricSupportUseCase,
     required this.getAvailableBiometricsUseCase,
     required this.authenticateBiometricUseCase,
-  }) : super(const BiometricInitialState()) {
+  }) : super(const BiometricState()) {
     on<CheckBiometricAvailabilityEvent>(_onCheckBiometricAvailability);
     on<AuthenticateWithBiometricEvent>(_onAuthenticateWithBiometric);
     on<ResetBiometricAuthEvent>(_onResetBiometricAuth);
@@ -26,12 +30,16 @@ class BiometricBloc extends Bloc<BiometricEvent, BiometricState> {
     CheckBiometricAvailabilityEvent event,
     Emitter<BiometricState> emit,
   ) async {
-    emit(const BiometricLoadingState());
+    emit(state.copyWith(isLoading: true));
     try {
       final info = await checkBiometricSupportUseCase();
-      emit(BiometricStatusState(biometricInfo: info));
+      emit(state.copyWith(
+        isLoading: false,
+        biometricInfo: info,
+      ));
     } catch (e) {
-      emit(BiometricStatusState(
+      emit(state.copyWith(
+        isLoading: false,
         biometricInfo: const BiometricInfoEntity(
           isSupported: false,
           canCheckBiometrics: false,
@@ -47,10 +55,7 @@ class BiometricBloc extends Bloc<BiometricEvent, BiometricState> {
     AuthenticateWithBiometricEvent event,
     Emitter<BiometricState> emit,
   ) async {
-    final currentState = state;
-    if (currentState is! BiometricStatusState) return;
-
-    emit(currentState.copyWith(
+    emit(state.copyWith(
       authStatus: AuthStatus.authenticating,
       errorMessage: null,
     ));
@@ -61,23 +66,23 @@ class BiometricBloc extends Bloc<BiometricEvent, BiometricState> {
       );
 
       if (isSuccess) {
-        emit(currentState.copyWith(
+        emit(state.copyWith(
           authStatus: AuthStatus.authenticated,
           errorMessage: null,
         ));
       } else {
-        emit(currentState.copyWith(
+        emit(state.copyWith(
           authStatus: AuthStatus.failed,
           errorMessage: 'Authentication failed or was canceled by user.',
         ));
       }
     } on Failure catch (failure) {
-      emit(currentState.copyWith(
+      emit(state.copyWith(
         authStatus: AuthStatus.error,
         errorMessage: failure.message,
       ));
     } catch (e) {
-      emit(currentState.copyWith(
+      emit(state.copyWith(
         authStatus: AuthStatus.error,
         errorMessage: 'An unexpected error occurred: ${e.toString()}',
       ));
@@ -88,12 +93,9 @@ class BiometricBloc extends Bloc<BiometricEvent, BiometricState> {
     ResetBiometricAuthEvent event,
     Emitter<BiometricState> emit,
   ) {
-    final currentState = state;
-    if (currentState is BiometricStatusState) {
-      emit(currentState.copyWith(
-        authStatus: AuthStatus.initial,
-        errorMessage: null,
-      ));
-    }
+    emit(state.copyWith(
+      authStatus: AuthStatus.initial,
+      errorMessage: null,
+    ));
   }
 }

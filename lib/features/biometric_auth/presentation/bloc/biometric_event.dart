@@ -1,10 +1,7 @@
-import 'package:equatable/equatable.dart';
+part of 'biometric_bloc.dart';
 
-abstract class BiometricEvent extends Equatable {
+abstract class BiometricEvent {
   const BiometricEvent();
-
-  @override
-  List<Object?> get props => [];
 }
 
 class CheckBiometricAvailabilityEvent extends BiometricEvent {
@@ -17,9 +14,6 @@ class AuthenticateWithBiometricEvent extends BiometricEvent {
   const AuthenticateWithBiometricEvent({
     this.localizedReason = 'Please scan your fingerprint or face to authenticate',
   });
-
-  @override
-  List<Object?> get props => [localizedReason];
 }
 
 class ResetBiometricAuthEvent extends BiometricEvent {

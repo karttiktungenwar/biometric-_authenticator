@@ -1,7 +1,6 @@
-import 'package:equatable/equatable.dart';
 import 'biometric_type_entity.dart';
 
-class BiometricInfoEntity extends Equatable {
+class BiometricInfoEntity  {
   final bool isSupported;
   final bool canCheckBiometrics;
   final List<BiometricTypeEntity> availableBiometrics;
@@ -13,7 +12,4 @@ class BiometricInfoEntity extends Equatable {
   });
 
   bool get isBiometricReady => isSupported && canCheckBiometrics && availableBiometrics.isNotEmpty;
-
-  @override
-  List<Object?> get props => [isSupported, canCheckBiometrics, availableBiometrics];
 }

@@ -1,5 +1,6 @@
+import 'package:biometric_authenticator/core/enums/biometric_category.dart';
+import 'package:biometric_authenticator/features/biometric_auth/domain/entities/biometric_type_entity.dart';
 import 'package:flutter/material.dart';
-import '../../../domain/entities/biometric_type_entity.dart';
 
 class BiometricTypeChip extends StatelessWidget {
   final BiometricTypeEntity biometricType;

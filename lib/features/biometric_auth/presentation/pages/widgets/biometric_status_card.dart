@@ -1,5 +1,6 @@
+import 'package:biometric_authenticator/features/biometric_auth/domain/entities/biometric_info_entity.dart';
 import 'package:flutter/material.dart';
-import '../../../domain/entities/biometric_info_entity.dart';
+
 import 'biometric_type_chip.dart';
 
 class BiometricStatusCard extends StatelessWidget {
